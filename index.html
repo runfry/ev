@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Еволюція - Українська настільна карткова гра</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --evolution-green: #255428;
+            --light-green: #4ade80;
+            --nature-brown: #92400e;
+            --cream: #fef7ed;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f8fffe 0%, #f0fdf8 30%, #ecfdf5 60%, #f6fdf7 100%);
+            position: relative;
+            user-select: none;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(34, 197, 94, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(5, 150, 105, 0.02) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(16, 185, 129, 0.01) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .hero-title {
+            font-family: 'Helvetica', 'Arial', sans-serif;
+            font-weight: 400;
+            color: var(--evolution-green);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .nature-texture {
+            background-image: url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2322c55e' fill-opacity='0.015'%3E%3Cpath d='M60 30c-3 0-5.5 2.5-5.5 5.5 0 1.5 0.6 2.9 1.6 3.9l-2.1 2.1c-1-1-2.4-1.6-3.9-1.6-3 0-5.5 2.5-5.5 5.5s2.5 5.5 5.5 5.5c1.5 0 2.9-0.6 3.9-1.6l2.1 2.1c-1 1-1.6 2.4-1.6 3.9 0 3 2.5 5.5 5.5 5.5s5.5-2.5 5.5-5.5c0-1.5-0.6-2.9-1.6-3.9l2.1-2.1c1 1 2.4 1.6 3.9 1.6 3 0 5.5-2.5 5.5-5.5s-2.5-5.5-5.5-5.5c-1.5 0-2.9 0.6-3.9 1.6l-2.1-2.1c1-1 1.6-2.4 1.6-3.9 0-3-2.5-5.5-5.5-5.5z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .evolution-progress {
+            background: linear-gradient(90deg, var(--evolution-green) 0%, var(--light-green) 100%);
+        }
+        
+
+        
+        .quiz-option {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .quiz-option:hover {
+            background: var(--light-green);
+            color: white;
+            transform: scale(1.02);
+        }
+        
+        .quiz-option.selected {
+            background: var(--evolution-green);
+            color: white;
+        }
+    </style>
+</head>
+<body class="nature-texture">
+    <!-- Навігація -->
+    <nav class="fixed top-0 w-full bg-white/90 backdrop-blur-md z-50 shadow-sm">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-gradient-to-br from-green-500 to-green-700 rounded-full flex items-center justify-center">
+                        <span class="text-white font-bold text-sm">Е</span>
+                    </div>
+                    <span class="font-bold text-xl" style="color: var(--evolution-green)">Еволюція</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="#about" class="hover:text-green-600 transition">Про гру</a>
+                    <a href="#gallery" class="hover:text-green-600 transition">Галерея</a>
+                    <a href="#reviews" class="hover:text-green-600 transition">Відгуки</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="min-h-screen flex items-center justify-center pt-20 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <!-- Ліва частина - головне зображення -->
+                <div class="order-2 lg:order-1">
+                    <div class="relative">
+                        <img src="images/sVeP5arj0tiMjyhJ38S2L.jpg" 
+                             alt="Настільна гра Еволюція" 
+                             class="w-full rounded-2xl shadow-2xl transform hover:scale-105 transition-transform duration-500">
+                        <div class="absolute -bottom-4 -right-4 bg-green-600 text-white px-6 py-3 rounded-xl shadow-lg">
+                            <span class="font-bold">🇺🇦 Зроблено в Україні</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Права частина - текстовий контент -->
+                <div class="order-1 lg:order-2 text-left">
+                    <div class="mb-8">
+                        <h1 class="hero-title text-5xl md:text-7xl font-bold mb-6 leading-tight">
+                            Еволюція
+                        </h1>
+                        <div class="w-24 h-1 evolution-progress rounded-full mb-8"></div>
+                    </div>
+                    
+                    <p class="text-xl text-gray-700 mb-8 leading-relaxed">
+                        Стратегічна карткова гра, де ви створюєте та розвиваєте власні екосистеми. 
+                        Боріться за виживання, адаптуйтеся до змін і станьте майстром еволюції.
+                    </p>
+                    
+                    <div class="space-y-4 mb-8">
+                        <div class="flex items-center space-x-3">
+                            <span class="bg-green-100 text-green-600 w-8 h-8 rounded-full flex items-center justify-center font-bold">2-6</span>
+                            <span class="text-gray-600">гравців</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <span class="bg-blue-100 text-blue-600 w-8 h-8 rounded-full flex items-center justify-center font-bold">60+</span>
+                            <span class="text-gray-600">хвилин</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <span class="bg-purple-100 text-purple-600 w-8 h-8 rounded-full flex items-center justify-center font-bold">8+</span>
+                            <span class="text-gray-600">років</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <button id="learnMoreBtn" class="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-xl font-semibold text-lg transition shadow-lg">
+                            🎮 Розпочати пригоду
+                        </button>
+                        <button class="border-2 border-green-600 text-green-600 hover:bg-green-50 px-8 py-4 rounded-xl font-semibold text-lg transition">
+                            📖 Правила гри
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Особливості гри -->
+    <section class="py-20 px-6 bg-white/20 backdrop-blur-sm">
+        <div class="container mx-auto max-w-6xl">
+            <h2 class="text-4xl font-bold text-center mb-16" style="color: var(--evolution-green)">
+                Чому Еволюція захоплює?
+            </h2>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white rounded-2xl p-8 shadow-xl card-hover border-l-4 border-green-500">
+                    <div class="flex items-center mb-4">
+                        <div class="text-4xl mr-4">🦎</div>
+                        <h3 class="font-bold text-2xl text-green-700">Адаптація</h3>
+                    </div>
+                    <p class="text-gray-600 leading-relaxed">
+                        Кожна тварина може розвивати унікальні здібності - від хижацтва до захисних механізмів. 
+                        Вибирайте стратегію, що допоможе вижити.
+                    </p>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-8 shadow-xl card-hover border-l-4 border-blue-500">
+                    <div class="flex items-center mb-4">
+                        <div class="text-4xl mr-4">🌿</div>
+                        <h3 class="font-bold text-2xl text-blue-700">Виживання</h3>
+                    </div>
+                    <p class="text-gray-600 leading-relaxed">
+                        Їжа обмежена, хижаки полюють, клімат змінюється. Тільки найрозумніші та найадаптованіші 
+                        види зможуть процвітати в цьому мінливому світі.
+                    </p>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-8 shadow-xl card-hover border-l-4 border-purple-500">
+                    <div class="flex items-center mb-4">
+                        <div class="text-4xl mr-4">🧬</div>
+                        <h3 class="font-bold text-2xl text-purple-700">Еволюція</h3>
+                    </div>
+                    <p class="text-gray-600 leading-relaxed">
+                        Спостерігайте, як ваші види розвиваються та мутують. Кожна гра - це унікальна історія 
+                        еволюції з несподіваними поворотами.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Опис гри -->
+    <section id="about" class="py-20 px-6">
+        <div class="container mx-auto max-w-4xl">
+            <h2 class="text-4xl font-bold text-center mb-12" style="color: var(--evolution-green)">
+                Що таке "Еволюція"?
+            </h2>
+            
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <img src="images/sVeP5arj0tiMjyhJ38S2L.jpg" 
+                         alt="Коробка гри Еволюція" 
+                         class="w-full rounded-xl shadow-lg">
+                </div>
+                <div>
+                    <p class="text-lg text-gray-700 mb-6 leading-relaxed">
+                        "Еволюція" — це стратегічна карткова гра для 2-6 гравців, де ви керуєте розвитком різних видів тварин. 
+                        Ваша мета — створити найуспішнішу екосистему, адаптуючись до змін навколишнього середовища.
+                    </p>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-start space-x-3">
+                            <span class="text-green-600 text-xl">⏱️</span>
+                            <div>
+                                <h4 class="font-semibold">Тривалість гри</h4>
+                                <p class="text-gray-600">60-90 хвилин</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-3">
+                            <span class="text-green-600 text-xl">👥</span>
+                            <div>
+                                <h4 class="font-semibold">Кількість гравців</h4>
+                                <p class="text-gray-600">2-6 гравців</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-3">
+                            <span class="text-green-600 text-xl">🎯</span>
+                            <div>
+                                <h4 class="font-semibold">Складність</h4>
+                                <p class="text-gray-600">Середня (8+)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Карусель карт -->
+    <section class="py-20 px-6 bg-white/25 backdrop-blur-sm">
+        <div class="container mx-auto max-w-6xl">
+            <h2 class="text-4xl font-bold text-center mb-12" style="color: var(--evolution-green)">
+                Приклади карт
+            </h2>
+            
+            <div class="relative">
+                <div id="cardCarousel" class="flex space-x-6 overflow-x-auto pb-4">
+                    <div class="min-w-80 bg-white rounded-xl shadow-lg p-6 card-hover">
+                        <img src="images/aEQbnei4_UkQ0kOhUUmEN.jpg" 
+                             alt="Карти гри Еволюція" 
+                             class="w-full h-72 object-cover rounded-lg mb-4">
+                        <h3 class="font-bold text-lg mb-2">🎴 Карти адаптацій</h3>
+                        <p class="text-gray-600 mb-3">Понад 100 унікальних карт з різними здібностями</p>
+                        <div class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm inline-block">
+                            Різноманітні адаптації
+                        </div>
+                    </div>
+                    
+                    <div class="min-w-80 bg-white rounded-xl shadow-lg p-6 card-hover">
+                        <img src="images/IzZv6rj8CvSbY3TwV_nnb.jpg" 
+                             alt="Коробка гри всередині" 
+                             class="w-full h-72 object-cover rounded-lg mb-4">
+                        <h3 class="font-bold text-lg mb-2">📦 Компоненти гри</h3>
+                        <p class="text-gray-600 mb-3">Якісні компоненти та детальні правила</p>
+                        <div class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm inline-block">
+                            Преміум якість
+                        </div>
+                    </div>
+                    
+                    <div class="min-w-80 bg-white rounded-xl shadow-lg p-6 card-hover">
+                        <img src="images/3l6EU88Tf9tHajy-JgkfO.jpg" 
+                             alt="Опис гри" 
+                             class="w-full h-72 object-cover rounded-lg mb-4">
+                        <h3 class="font-bold text-lg mb-2">📖 Правила гри</h3>
+                        <p class="text-gray-600 mb-3">Детальний опис механік та стратегій</p>
+                        <div class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm inline-block">
+                            Легко вивчити
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Міні-квіз -->
+    <section class="py-20 px-6">
+        <div class="container mx-auto max-w-2xl">
+            <h2 class="text-4xl font-bold text-center mb-12" style="color: var(--evolution-green)">
+                Хто ти в еволюції? 🤔
+            </h2>
+            
+            <div id="quiz" class="bg-white/80 backdrop-blur rounded-xl shadow-xl p-8">
+                <div id="quizQuestion" class="mb-8">
+                    <h3 class="text-xl font-semibold mb-6">Яку стратегію виживання ти обереш?</h3>
+                    <div class="space-y-3">
+                        <div class="quiz-option p-4 rounded-lg border-2 border-gray-200" data-value="predator">
+                            🦁 Активно полювати на інших
+                        </div>
+                        <div class="quiz-option p-4 rounded-lg border-2 border-gray-200" data-value="herbivore">
+                            🌿 Мирно поїдати рослини
+                        </div>
+                        <div class="quiz-option p-4 rounded-lg border-2 border-gray-200" data-value="scavenger">
+                            🦅 Живитися залишками їжі
+                        </div>
+                        <div class="quiz-option p-4 rounded-lg border-2 border-gray-200" data-value="defensive">
+                            🛡️ Створити міцний захист
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="quizResult" class="hidden text-center">
+                    <div class="text-6xl mb-4" id="resultEmoji"></div>
+                    <h3 class="text-2xl font-bold mb-4" id="resultTitle"></h3>
+                    <p class="text-gray-600" id="resultDescription"></p>
+                    <button id="restartQuiz" class="mt-6 bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition">
+                        Пройти ще раз
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Відгуки -->
+    <section id="reviews" class="py-20 px-6 bg-white/25 backdrop-blur-sm">
+        <div class="container mx-auto max-w-6xl">
+            <h2 class="text-4xl font-bold text-center mb-12" style="color: var(--evolution-green)">
+                Що кажуть гравці
+            </h2>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <div class="flex items-center mb-4">
+                        <img src="images/sVeP5arj0tiMjyhJ38S2L.jpg" 
+                             alt="Оксана" 
+                             class="w-12 h-12 rounded-full mr-3 object-cover">
+                        <div>
+                            <h4 class="font-semibold">Оксана К.</h4>
+                            <div class="text-yellow-400">⭐⭐⭐⭐⭐</div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">
+                        "Неймовірно захоплююча гра! Кожна партія унікальна, а стратегії постійно змінюються. 
+                        Дуже рада, що маємо таку якісну українську гру."
+                    </p>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <div class="flex items-center mb-4">
+                        <img src="images/aEQbnei4_UkQ0kOhUUmEN.jpg" 
+                             alt="Андрій" 
+                             class="w-12 h-12 rounded-full mr-3 object-cover">
+                        <div>
+                            <h4 class="font-semibold">Андрій М.</h4>
+                            <div class="text-yellow-400">⭐⭐⭐⭐⭐</div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">
+                        "Ідеальний баланс між стратегією та веселощами. Діти швидко вивчили правила, 
+                        а дорослі не можуть відірватися від гри!"
+                    </p>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <div class="flex items-center mb-4">
+                        <img src="images/IzZv6rj8CvSbY3TwV_nnb.jpg" 
+                             alt="Марія" 
+                             class="w-12 h-12 rounded-full mr-3 object-cover">
+                        <div>
+                            <h4 class="font-semibold">Марія В.</h4>
+                            <div class="text-yellow-400">⭐⭐⭐⭐⭐</div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">
+                        "Використовую у школі на уроках біології. Діти краще розуміють еволюцію, 
+                        граючи в цю гру. Освітня цінність неоціненна!"
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Галерея -->
+    <section id="gallery" class="py-20 px-6">
+        <div class="container mx-auto max-w-6xl">
+            <h2 class="text-4xl font-bold text-center mb-12" style="color: var(--evolution-green)">
+                Галерея
+            </h2>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Основне зображення - коробка гри -->
+                <div class="md:col-span-2">
+                    <img src="images/sVeP5arj0tiMjyhJ38S2L.jpg" 
+                         alt="Коробка гри Еволюція" 
+                         class="w-full h-96 object-cover rounded-xl shadow-2xl card-hover mx-auto">
+                </div>
+                
+                <!-- Карти гри -->
+                <div class="relative">
+                    <img src="images/aEQbnei4_UkQ0kOhUUmEN.jpg" 
+                         alt="Карти гри" 
+                         class="w-full h-80 object-cover rounded-xl shadow-lg card-hover">
+                    <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur p-3 rounded-lg">
+                        <h4 class="font-bold text-lg">Карти адаптацій</h4>
+                        <p class="text-sm text-gray-600">Понад 100 унікальних карт</p>
+                    </div>
+                </div>
+                
+                <!-- Компоненти гри -->
+                <div class="relative">
+                    <img src="images/IzZv6rj8CvSbY3TwV_nnb.jpg" 
+                         alt="Компоненти гри" 
+                         class="w-full h-80 object-cover rounded-xl shadow-lg card-hover">
+                    <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur p-3 rounded-lg">
+                        <h4 class="font-bold text-lg">Якісні компоненти</h4>
+                        <p class="text-sm text-gray-600">Все необхідне для гри</p>
+                    </div>
+                </div>
+                
+                <!-- Правила гри -->
+                <div class="md:col-span-2">
+                    <img src="images/3l6EU88Tf9tHajy-JgkfO.jpg" 
+                         alt="Правила гри" 
+                         class="w-full h-64 object-cover rounded-xl shadow-lg card-hover">
+                    <div class="text-center mt-4">
+                        <h4 class="font-bold text-xl mb-2">Детальні правила українською</h4>
+                        <p class="text-gray-600">Легко вивчити, складно освоїти до кінця</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA блок -->
+    <section class="py-20 px-6 bg-gradient-to-r from-green-600 to-green-700 text-white">
+        <div class="container mx-auto max-w-4xl text-center">
+            <h2 class="text-4xl font-bold mb-6">
+                Готовий почати еволюцію?
+            </h2>
+            <p class="text-xl mb-8 opacity-90">
+                Приєднуйся до тисяч гравців, які вже досліджують захоплюючий світ еволюції
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <button class="bg-white text-green-600 hover:bg-gray-100 px-8 py-4 rounded-full font-semibold text-lg transition shadow-lg">
+                    🛒 Замовити гру
+                </button>
+                <button class="border-2 border-white text-white hover:bg-white hover:text-green-600 px-8 py-4 rounded-full font-semibold text-lg transition">
+                    📥 Завантажити правила
+                </button>
+                <button class="border-2 border-white text-white hover:bg-white hover:text-green-600 px-8 py-4 rounded-full font-semibold text-lg transition">
+                    📧 Підписатися на новини
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 px-6">
+        <div class="container mx-auto max-w-6xl">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="w-8 h-8 bg-gradient-to-br from-green-500 to-green-700 rounded-full flex items-center justify-center">
+                            <span class="text-white font-bold text-sm">Е</span>
+                        </div>
+                        <span class="font-bold text-xl">Еволюція</span>
+                    </div>
+                    <p class="text-gray-400">
+                        Українська настільна гра про еволюцію та виживання
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Контакти</h4>
+                    <div class="space-y-2 text-gray-400">
+                        <p>📧 info@evolution-game.ua</p>
+                        <p>📱 +380 (XX) XXX-XX-XX</p>
+                        <p>📍 Київ, Україна</p>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Соцмережі</h4>
+                    <div class="space-y-2">
+                        <a href="#" class="text-gray-400 hover:text-white transition flex items-center space-x-2">
+                            <span>📘</span> <span>Facebook</span>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition flex items-center space-x-2">
+                            <span>📷</span> <span>Instagram</span>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition flex items-center space-x-2">
+                            <span>🎬</span> <span>YouTube</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Корисні посилання</h4>
+                    <div class="space-y-2">
+                        <a href="#" class="text-gray-400 hover:text-white transition block">Правила гри</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition block">FAQ</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition block">Підтримка</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition block">Партнерам</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 Еволюція. Всі права захищені. | Зроблено з ❤️ в Україні</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module">
+
+
+        // Квіз логіка
+        const quizOptions = document.querySelectorAll('.quiz-option');
+        const quizQuestion = document.getElementById('quizQuestion');
+        const quizResult = document.getElementById('quizResult');
+        const resultEmoji = document.getElementById('resultEmoji');
+        const resultTitle = document.getElementById('resultTitle');
+        const resultDescription = document.getElementById('resultDescription');
+        const restartQuiz = document.getElementById('restartQuiz');
+
+        const quizResults = {
+            predator: {
+                emoji: '🦁',
+                title: 'Ти - Хижак!',
+                description: 'Активний і цілеспрямований, ти обираєш пряму стратегію та не боїшся ризикувати заради перемоги.'
+            },
+            herbivore: {
+                emoji: '🦌',
+                title: 'Ти - Травоїдна тварина!',
+                description: 'Мирний і розважливий, ти віддаєш перевагу стабільним стратегіям та довгостроковому плануванню.'
+            },
+            scavenger: {
+                emoji: '🦅',
+                title: 'Ти - Падальщик!',
+                description: 'Розумний і хитрий, ти вмієш використовувати можливості, які створюють інші, та знаходити нестандартні рішення.'
+            },
+            defensive: {
+                emoji: '🐢',
+                title: 'Ти - Захисник!',
+                description: 'Обережний і терплячий, ти будуєш міцну оборону та чекаєш на правильний момент для дій.'
+            }
+        };
+
+        quizOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                const value = option.dataset.value;
+                const result = quizResults[value];
+                
+                quizQuestion.classList.add('hidden');
+                quizResult.classList.remove('hidden');
+                
+                resultEmoji.textContent = result.emoji;
+                resultTitle.textContent = result.title;
+                resultDescription.textContent = result.description;
+            });
+        });
+
+        restartQuiz.addEventListener('click', () => {
+            quizResult.classList.add('hidden');
+            quizQuestion.classList.remove('hidden');
+            quizOptions.forEach(option => option.classList.remove('selected'));
+        });
+
+        // Звуковий ефект (опціонально)
+        function playNatureSound() {
+            // Можна додати звуки природи при завантаженні сторінки
+        }
+
+        // Анімації при скролі
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Плавна навігація
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Видалено демо кнопку
+
+        // Кнопка "Дізнатись більше"
+        document.getElementById('learnMoreBtn').addEventListener('click', () => {
+            document.getElementById('about').scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+
+        // Ініціалізація
+        document.addEventListener('DOMContentLoaded', () => {
+            // Додати анімації входу для елементів
+            const animatedElements = document.querySelectorAll('.card-hover');
+            animatedElements.forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'all 0.6s ease';
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>
